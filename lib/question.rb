@@ -1,3 +1,3 @@
-class Question
+class Question < ActiveRecord::Base
 
 end

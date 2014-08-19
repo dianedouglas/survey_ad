@@ -1,3 +1,4 @@
-class Survey
+class Survey < ActiveRecord::Base
+
 
 end
