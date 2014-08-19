@@ -9,6 +9,7 @@ development_configurations = database_configurations['development']
 ActiveRecord::Base.establish_connection(development_configurations)
 
 @current_survey = nil
+@current_question = nil
 
 def main_menu
   puts "\n\n"
@@ -92,7 +93,27 @@ def add_question
   puts "\n\n"
   puts "What is your question?"
   user_input = gets.chomp
-  @current_survey.questions.create({ name: user_input })
+  @current_question = @current_survey.questions.create({ name: user_input })
+  puts "Add possible responses"
+  possible_responses
+end
+
+def possible_responses
+  puts "\n\n"
+  answer = nil
+  loop do
+  puts "Enter a user question option and when finished enter 'done'"
+    answer = gets.chomp
+    if answer == 'done'
+      break
+    else
+    @current_question.answers.create({ name: answer })
+    end
+  end
+  puts @current_question.name
+  @current_question.answers.each_with_index do |answer, index|
+    puts (index + 1).to_s + ' ' + answer.name
+  end
 end
 
 def taker_menu
