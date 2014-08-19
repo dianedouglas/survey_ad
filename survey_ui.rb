@@ -117,6 +117,21 @@ def possible_responses
 end
 
 def taker_menu
+  print_all_surveys
+  puts "Please enter the survey name you would like to take."
+  taker_response = gets.chomp
+  @current_survey = nil
+  Survey.all.each do |survey|
+    if taker_response == survey.name
+      @current_survey = survey
+      break
+    end
+  end
+  if @current_survey == nil
+    puts "Errrrr You SUCK"
+  else
+    print_survey_questions
+  end
 end
 
 main_menu
