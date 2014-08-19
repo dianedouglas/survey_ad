@@ -2,6 +2,7 @@ require 'active_record'
 require './lib/answer'
 require './lib/survey'
 require './lib/question'
+require './lib/response'
 require 'pry'
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
@@ -18,6 +19,7 @@ def main_menu
 
     puts "Enter 'sd' if you are a survey designer."
     puts "Enter 'st' if you are a survey taker."
+
     user_input = gets.chomp
 
     if user_input == 'sd'
@@ -36,11 +38,15 @@ def designer_menu
   puts "Enter 'ns' to design a new survey."
   puts "Enter 'm' to return to the main menu."
   puts "Enter 'es' to edit an existing survey."
+  puts "Enter 'p' to view percentage survey statistics."
+
   choice = gets.chomp
   if choice == 'ns'
     new_survey
   elsif choice == 'm'
     main_menu
+  elsif choice == 'p'
+    percentage
   else
     puts "Try, try again!"
     designer_menu
@@ -159,5 +165,21 @@ def taker_menu
   end
 end
 
+def percentage
+  print_all_surveys
+  puts "Please enter the survey name you would like to view."
+  view_response = gets.chomp
+  @current_survey = nil
+  Survey.all.each do |survey|
+    if view_response == survey.name
+      @current_survey = survey
+      break
+    end
+  end
+  # number_of_people = @answers.length/@current_survey.questions.length
+  # puts "#{number_of_people} people took this survey."
+  # @current_survey.questions.each do |question|
+  #   answer1 =
+end
 
 main_menu

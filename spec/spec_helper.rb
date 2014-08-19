@@ -4,6 +4,7 @@ require 'rspec'
 require 'survey'
 require "question"
 require "answer"
+require 'response'
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
 development_configuration = database_configurations['test']
@@ -19,4 +20,5 @@ def setup
   @test_survey = Survey.create({ name: 'what ancient greek goddess are you?' })
   @test_question = Question.create({ name: 'Where would you feel most at home?', survey_id: @test_survey.id })
   @test_answer = Answer.create({ name: 'In a big cosmopolitian city, bathed in culture!', question_id: @test_question.id })
+  @test_response = @test_question.responses.create({ answer_id: 1, question_id: @test_question.id })
 end
