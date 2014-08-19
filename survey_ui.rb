@@ -11,7 +11,7 @@ ActiveRecord::Base.establish_connection(development_configurations)
 
 @current_survey = nil
 @current_question = nil
-@answers = []
+
 
 def main_menu
   puts "\n\n"
@@ -130,8 +130,8 @@ def print_questions_one_by_one
     loop do
     puts "Please enter the number of your answer:"
     answer = gets.chomp.to_i
-      if (answer.class == Fixnum) && (answer > 0) && (answer <= @current_question.answers.length)
-        @answers << answer
+      if (answer.is_a? Fixnum) && (answer > 0) && (answer <= @current_question.answers.length)
+        @current_question.responses.create({ answer_id: answer})
         break
       else
         puts "You done goofed. That wasn't a response."
@@ -176,10 +176,12 @@ def percentage
       break
     end
   end
-  # number_of_people = @answers.length/@current_survey.questions.length
-  # puts "#{number_of_people} people took this survey."
-  # @current_survey.questions.each do |question|
-  #   answer1 =
+  number_of_people = @current_survey.questions[0].responses.length
+  puts "#{number_of_people} people took this survey."
+  @current_survey.questions.each_with_index do |quest, i|
+    people_who_chose1 = @current_survey.questions[i].responses.where({answer_id: 1}).count
+  end
+  puts "people who chose 1: #{people_who_chose1}"
 end
 
 main_menu
