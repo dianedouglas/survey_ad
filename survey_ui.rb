@@ -10,6 +10,7 @@ ActiveRecord::Base.establish_connection(development_configurations)
 
 @current_survey = nil
 @current_question = nil
+@answers = []
 
 def main_menu
   puts "\n\n"
@@ -111,6 +112,30 @@ def possible_responses
     end
   end
   puts @current_question.name
+  print_possible_responses
+end
+
+def print_questions_one_by_one
+  @current_survey.questions.each do |query|
+    puts "\n\n"
+    puts query.name
+    @current_question = query
+    print_possible_responses
+    loop do
+    puts "Please enter the number of your answer:"
+    answer = gets.chomp.to_i
+      if (answer.class == Fixnum) && (answer > 0) && (answer <= @current_question.answers.length)
+        @answers << answer
+        break
+      else
+        puts "You done goofed. That wasn't a response."
+      end
+    end
+  end
+end
+
+def print_possible_responses
+  puts "\n\n"
   @current_question.answers.each_with_index do |answer, index|
     puts (index + 1).to_s + ' ' + answer.name
   end
@@ -130,8 +155,9 @@ def taker_menu
   if @current_survey == nil
     puts "Errrrr You SUCK"
   else
-    print_survey_questions
+    print_questions_one_by_one
   end
 end
+
 
 main_menu
